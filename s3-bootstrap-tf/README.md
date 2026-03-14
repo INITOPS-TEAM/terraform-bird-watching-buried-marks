@@ -1,5 +1,9 @@
 # Getting started (creating your first bucket)
 
+This project is a template for creating S3 buckets for remote storage of Terraform state.
+The buckets created by this project are encrypted, versioning, state locking, public access block,
+and prevent accidental deletion.
+
 ## 1. Creating a bucket
 
 Comment out the backend block "s3" in the main.tf file.
@@ -50,4 +54,9 @@ terraform init
 
 Confirm copying the state
 
-## 4. Remote state is ready to work
+## 4. Verification
+
+* Run `terraform state list` to verify remote data fetching.
+* Make sure the `terraform.tfstate` file is not in the local directory.
+
+## 5. Remote state is ready to work

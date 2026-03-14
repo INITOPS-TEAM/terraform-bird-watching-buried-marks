@@ -11,9 +11,4 @@ variable "s3_bucket_name" {
 variable "tags" {
   description = "Tags to apply to resource"
   type        = map(string)
-  default = {
-    env = "dev"
-    ManagedBy   = "Terraform"
-    Project     = "buried-marks-birdwatching"
-  }
 }
