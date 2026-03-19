@@ -3,8 +3,7 @@
 *.tfstate.*
 *.tfplan
 *.log
-.env
-*.tfvars
+#*.tfvars
 *.tfvars.json
 backend.conf
 override.tf
