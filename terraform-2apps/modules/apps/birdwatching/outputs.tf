@@ -8,3 +8,7 @@ output "lb_domain" {
 output "nameservers" {
   value = module.dns.nameservers
 }
+
+output "consul_sg_id" {
+  value = aws_security_group.consul.id
+}

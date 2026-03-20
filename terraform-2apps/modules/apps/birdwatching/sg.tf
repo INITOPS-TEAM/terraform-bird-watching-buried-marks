@@ -50,23 +50,24 @@ resource "aws_vpc_security_group_egress_rule" "allow_outbound" {
   ip_protocol       = "-1"
 }
 
-# The balancer is available to everyone on port 80
-resource "aws_vpc_security_group_ingress_rule" "lbnginx_80" {
+# The balancer is available to everyone on port 80 and 443
+resource "aws_vpc_security_group_ingress_rule" "lbnginx_80_443" {
   security_group_id = aws_security_group.lbnginx.id
+  for_each          = toset(["80", "443"])
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  to_port           = 80
+  from_port         = each.value
+  to_port           = each.value
   ip_protocol       = "tcp"
-  description       = "Ingress HTTP from all"
-  tags              = { Name = "${var.project_name}-${var.env}-nginx-80" }
+  description       = "Ingress HTTP/HTTPS from all"
+  tags              = { Name = "${var.project_name}-${var.env}-nginx-${each.value}" }
   }
 
 # Traffic from LB to App
 resource "aws_vpc_security_group_ingress_rule" "app_from_lb" {
   security_group_id            = aws_security_group.app.id
   referenced_security_group_id = aws_security_group.lbnginx.id
-  from_port                    = 80
-  to_port                      = 80
+  from_port                    = 5000
+  to_port                      = 5000
   ip_protocol                  = "tcp"
 }
 
@@ -93,11 +94,11 @@ resource "aws_vpc_security_group_ingress_rule" "consul_internal" {
 }
 
 # Consul UI access only from internal network
-resource "aws_vpc_security_group_ingress_rule" "consul_tcp_8500" {
-  security_group_id = aws_security_group.consul.id
-  cidr_ipv4         = var.vpc_cidr
-  from_port         = 8500
-  to_port           = 8500
-  ip_protocol       = "tcp"
-  tags              = { Name = "${var.project_name}-${var.env}-consul-tcp-8500" }
-}
+# resource "aws_vpc_security_group_ingress_rule" "consul_tcp_8500" {
+#   security_group_id = aws_security_group.consul.id
+#   cidr_ipv4         = var.vpc_cidr
+#   from_port         = 8500
+#   to_port           = 8500
+#   ip_protocol       = "tcp"
+#   tags              = { Name = "${var.project_name}-${var.env}-consul-tcp-8500" }
+# }

@@ -74,7 +74,11 @@ resource "aws_instance" "jenkins" {
   subnet_id                   = var.compute_subnet_id
   associate_public_ip_address = false
 
-  vpc_security_group_ids = [aws_security_group.jenkins.id]
+
+  vpc_security_group_ids = [
+    aws_security_group.jenkins.id,
+    var.consul_sg_id
+  ]
   iam_instance_profile   = aws_iam_instance_profile.jenkins.name
 
 

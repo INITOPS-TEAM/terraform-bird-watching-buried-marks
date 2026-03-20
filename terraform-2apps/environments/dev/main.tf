@@ -31,6 +31,7 @@ module "jenkins" {
   env                   = var.env
   ami_id                = var.ami_id
   instance_type_jenkins = var.instance_type_jenkins
+  consul_sg_id = module.birdwatching.consul_sg_id
   nat_az                = var.nat_az
   key_name              = aws_key_pair.this.key_name
   vpc_id                = module.vpc.vpc_id

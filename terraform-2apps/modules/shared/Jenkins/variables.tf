@@ -35,3 +35,7 @@ variable "vpc_id" {
 variable "nat_az" {
   type = string
 }
+
+variable "consul_sg_id" {
+  type        = string
+}
