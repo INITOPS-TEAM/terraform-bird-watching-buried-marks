@@ -17,6 +17,32 @@ module "vpc" {
   eks_subnets     = var.eks_subnets
 }
 
+module "eks" {
+  source = "../../modules/shared/eks"
+
+  cluster_name = var.cluster_name
+  vpc_id       = module.vpc.vpc_id
+  eks_subnets  = [module.vpc.eks_subnet_id]
+  node_subnets = [module.vpc.compute_subnet_id]
+
+  desired_size   = 2
+  min_size       = 1
+  max_size       = 3
+  instance_types = ["t3.small"]
+}
+
+module "alb_controller" {
+  source = "../../modules/shared/alb-controller"
+
+  cluster_name       = var.cluster_name
+  oidc_provider_arn  = module.eks.oidc_provider_arn
+  oidc_provider_url  = module.eks.oidc_provider_url
+  vpc_id             = module.vpc.vpc_id
+  aws_region         = var.aws_region
+
+  depends_on = [module.eks]
+}
+
 module "iam" {
   source = "../../modules/shared/IAM"
 
