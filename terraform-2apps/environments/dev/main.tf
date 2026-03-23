@@ -22,8 +22,8 @@ module "eks" {
 
   cluster_name = var.cluster_name
   vpc_id       = module.vpc.vpc_id
-  eks_subnets  = [module.vpc.eks_subnet_id]
-  node_subnets = [module.vpc.compute_subnet_id]
+  eks_subnets  = module.vpc.eks_subnet_ids
+  node_subnets = module.vpc.compute_subnet_ids
 
   desired_size   = 2
   min_size       = 1

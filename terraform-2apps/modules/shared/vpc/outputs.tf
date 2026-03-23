@@ -16,8 +16,12 @@ output "compute_subnet_id" {
   value = aws_subnet.compute[var.nat_az].id
 }
 
-output "eks_subnet_id" {
-  value = aws_subnet.eks[var.nat_az].id
+output "compute_subnet_ids" {
+  value = [for s in aws_subnet.compute : s.id]
+}
+
+output "eks_subnet_ids" {
+  value = [for s in aws_subnet.eks : s.id]
 }
 
 output "nat_gateway_ip" {
