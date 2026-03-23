@@ -6,7 +6,7 @@ instance_type         = "t3.micro"
 instance_type_jenkins = "t3.small"
 app_instance_count    = 2
 public_key_path       = "~/.ssh/pictap-dev-ssh.pub"
-domain_name           = "command-line.top"
+domain_name           = "dev.command-line.top"
 
 #vpc
 vpc_cidr     = "10.0.0.0/16"

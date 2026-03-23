@@ -31,17 +31,11 @@ module "eks" {
   instance_types = ["t3.small"]
 }
 
-module "alb_controller" {
-  source = "../../modules/shared/alb-controller"
-
-  cluster_name       = var.cluster_name
-  oidc_provider_arn  = module.eks.oidc_provider_arn
-  oidc_provider_url  = module.eks.oidc_provider_url
-  vpc_id             = module.vpc.vpc_id
-  aws_region         = var.aws_region
-
-  depends_on = [module.eks]
-}
+# module "gateway" {
+#   source = "../../modules/shared/gateway"
+#   cluster_name = var.cluster_name
+#   depends_on = [module.eks]
+# }
 
 module "iam" {
   source = "../../modules/shared/IAM"
