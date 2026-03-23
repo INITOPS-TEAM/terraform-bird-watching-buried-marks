@@ -31,12 +31,6 @@ module "eks" {
   instance_types = ["t3.small"]
 }
 
-# module "gateway" {
-#   source = "../../modules/shared/gateway"
-#   cluster_name = var.cluster_name
-#   depends_on = [module.eks]
-# }
-
 module "iam" {
   source = "../../modules/shared/IAM"
 
