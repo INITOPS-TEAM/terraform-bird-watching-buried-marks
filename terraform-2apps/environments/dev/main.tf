@@ -17,6 +17,20 @@ module "vpc" {
   eks_subnets     = var.eks_subnets
 }
 
+module "eks" {
+  source = "../../modules/shared/eks"
+
+  cluster_name = var.cluster_name
+  vpc_id       = module.vpc.vpc_id
+  eks_subnets  = module.vpc.eks_subnet_ids
+  node_subnets = module.vpc.compute_subnet_ids
+
+  desired_size   = 2
+  min_size       = 1
+  max_size       = 3
+  instance_types = ["t3.small"]
+}
+
 module "iam" {
   source = "../../modules/shared/IAM"
 

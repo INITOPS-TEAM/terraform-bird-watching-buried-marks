@@ -1,4 +1,4 @@
-# Security Groups 
+# Security Groups
 resource "aws_security_group" "ssh" {
   name        = "${var.project_name}-${var.env}-ssh-sg"
   description = "Security group for SSH access"
@@ -31,11 +31,11 @@ resource "aws_security_group" "consul" {
   tags        = { Name = "${var.project_name}-${var.env}-consul-sg" }
 }
 
-# Rules 
-# SSH only from Jenkins 
+# Rules
+# SSH only from Jenkins
 resource "aws_vpc_security_group_ingress_rule" "ssh_from_jenkins" {
   security_group_id            = aws_security_group.ssh.id
-  referenced_security_group_id = var.jenkins_sg_id 
+  referenced_security_group_id = var.jenkins_sg_id
   from_port                    = 22
   to_port                      = 22
   ip_protocol                  = "tcp"

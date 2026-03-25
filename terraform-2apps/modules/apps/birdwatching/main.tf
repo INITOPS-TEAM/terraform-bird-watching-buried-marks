@@ -2,7 +2,7 @@ resource "random_id" "bucket_suffix" {
   byte_length = 4
 }
 
-# S3 for DB and S3 for imeges 
+# S3 for DB and S3 for imeges
 module "s3_images" {
   source = "../../shared/S3"
   bucket_name       = "${var.project_name}-${var.env}-images-${random_id.bucket_suffix.hex}"

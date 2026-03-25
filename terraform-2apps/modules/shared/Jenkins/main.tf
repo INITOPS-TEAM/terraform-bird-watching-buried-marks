@@ -1,5 +1,5 @@
 ##########################
-# IAM Role for Jenkins 
+# IAM Role for Jenkins
 resource "aws_iam_role" "jenkins" {
   name = "${var.project_name}-${var.env}-jenkins-role"
 

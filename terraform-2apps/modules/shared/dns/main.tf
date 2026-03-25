@@ -4,7 +4,7 @@ resource "aws_route53_zone" "main" {
 
 resource "aws_route53_record" "lb" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = "${var.env}.${var.domain_name}"
+  name    = var.domain_name
   type    = "A"
   ttl     = 300
   records = [var.lb_ip]
