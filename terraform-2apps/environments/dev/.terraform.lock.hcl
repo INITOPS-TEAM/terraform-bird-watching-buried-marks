@@ -5,6 +5,7 @@ provider "registry.terraform.io/hashicorp/aws" {
   version     = "6.37.0"
   constraints = "~> 6.0"
   hashes = [
+    "h1:OdQC/z+3ReUAPhlXCJIJYUZlSQ3b96TWfFK3lCT5zKU=",
     "h1:w3z/TApcKD3b/aMZoZZKSxOld4xw+gEtQ1ka6C1UN+4=",
     "zh:0427fadb719ed5a32feb09f047539d2348e659056f3b8a8589d34d8f0a95be7a",
     "zh:3891c670674aba2125a7ac6d4348cde43646b1b46ce6f829e6f4724091bc0dcd",
@@ -29,6 +30,7 @@ provider "registry.terraform.io/hashicorp/helm" {
   constraints = "~> 3.0"
   hashes = [
     "h1:/tVXN35+rcMB8KjqtYTIoFl7lxcQyDCCj+vKLXDmXck=",
+    "h1:47CqNwkxctJtL/N/JuEj+8QMg8mRNI/NWeKO5/ydfZU=",
     "h1:5b2ojWKT0noujHiweCds37ZreRFRQLNaErdJLusJN88=",
     "zh:1a6d5ce931708aec29d1f3d9e360c2a0c35ba5a54d03eeaff0ce3ca597cd0275",
     "zh:3411919ba2a5941801e677f0fea08bdd0ae22ba3c9ce3309f55554699e06524a",
@@ -49,6 +51,7 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
   version     = "3.0.1"
   constraints = "~> 3.0"
   hashes = [
+    "h1:P0c8knzZnouTNFIRij8IS7+pqd0OKaFDYX0j4GRsiqo=",
     "h1:fu3VBNxwJU/G1Ocw+rEoUtPEM233B0bQMquk12+pxWY=",
     "h1:vyHdH0p6bf9xp1NPePObAJkXTJb/I09FQQmmevTzZe0=",
     "zh:02d55b0b2238fd17ffa12d5464593864e80f402b90b31f6e1bd02249b9727281",
@@ -72,6 +75,7 @@ provider "registry.terraform.io/hashicorp/random" {
   hashes = [
     "h1:Eexl06+6J+s75uD46+WnZtpJZYRVUMB0AiuPBifK6Jc=",
     "h1:fdfOl1HabDT42XLH8qjmfTbVZpgQZ5lyOyOa+GQhm0w=",
+    "h1:u8AKlWVDTH5r9YLSeswoVEjiY72Rt4/ch7U+61ZDkiQ=",
     "zh:08dd03b918c7b55713026037c5400c48af5b9f468f483463321bd18e17b907b4",
     "zh:0eee654a5542dc1d41920bbf2419032d6f0d5625b03bd81339e5b33394a3e0ae",
     "zh:229665ddf060aa0ed315597908483eee5b818a17d09b6417a0f52fd9405c4f57",
@@ -91,6 +95,7 @@ provider "registry.terraform.io/hashicorp/tls" {
   version = "4.2.1"
   hashes = [
     "h1:F5d6bQY8UlBo0D71Sv7CsV+3aZOFz0yeNF+vufog7h4=",
+    "h1:akFNuHwvrtnYMBofieoeXhPJDhYZzJVu/Q/BgZK2fgg=",
     "h1:wTIzrwUB7NINYwLFYLdWkJQwg1r9XT6rVOGrZ1+lMmI=",
     "zh:0d1e7d07ac973b97fa228f46596c800de830820506ee145626f079dd6bbf8d8a",
     "zh:5c7e3d4348cb4861ab812973ef493814a4b224bdd3e9d534a7c8a7c992382b86",
