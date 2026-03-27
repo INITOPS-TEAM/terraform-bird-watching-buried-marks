@@ -8,3 +8,17 @@ terraform {
     }
   }
 }
+
+provider "helm" {
+  kubernetes = {
+    config_path = "~/.kube/config"
+  }
+
+  registries = [
+    {
+      url      = local.repository
+      username = var.ecr_username
+      password = var.ecr_password
+    }
+  ]
+}

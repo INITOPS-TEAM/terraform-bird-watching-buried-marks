@@ -18,3 +18,7 @@ output "oidc_provider_url" {
   value       = aws_eks_cluster.main.identity[0].oidc[0].issuer
   description = "OIDC provider URL"
 }
+
+output "gateway_api_controller_role_arn" {
+  value = aws_iam_role.gateway_api_controller.arn
+}

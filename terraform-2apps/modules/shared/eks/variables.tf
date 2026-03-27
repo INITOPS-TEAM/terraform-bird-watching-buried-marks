@@ -53,3 +53,23 @@ variable "kubernetes_version" {
   default     = "1.35"
   description = "Kubernetes version"
 }
+
+variable "aws_region" {
+  type = string
+}
+
+variable "account_id" {
+  type = string
+}
+
+variable "namespace" {
+  type = string
+}
+
+variable "ecr_username" {
+  type = string
+}
+
+variable "ecr_password" {
+  type = string
+}

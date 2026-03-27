@@ -7,6 +7,8 @@ instance_type_jenkins = "t3.small"
 app_instance_count    = 2
 public_key_path       = "~/.ssh/pictap-dev-ssh.pub"
 domain_name           = "birds.pp.ua"
+namespace             = "buried-marks"
+account_id            = "531331080468"
 
 #vpc
 vpc_cidr     = "10.0.0.0/16"

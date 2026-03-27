@@ -24,6 +24,12 @@ module "eks" {
   vpc_id       = module.vpc.vpc_id
   eks_subnets  = module.vpc.eks_subnet_ids
   node_subnets = module.vpc.compute_subnet_ids
+  aws_region   = var.aws_region
+  account_id   = var.account_id
+  namespace    = var.namespace
+  ecr_username = data.aws_ecr_authorization_token.token.user_name
+  ecr_password = data.aws_ecr_authorization_token.token.password
+
 
   desired_size   = 2
   min_size       = 1

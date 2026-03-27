@@ -1,12 +1,16 @@
+variable "account_id" {
+  type = string
+}
+
+variable "aws_region" {
+  type = string
+}
+
 variable "project_name" {
   type = string
 }
 
 variable "env" {
-  type = string
-}
-
-variable "aws_region" {
   type = string
 }
 
@@ -56,4 +60,8 @@ variable "compute_subnets" {
 
 variable "eks_subnets" {
   type = map(string)
+}
+
+variable "namespace" {
+  type = string
 }
