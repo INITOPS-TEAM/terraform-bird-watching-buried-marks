@@ -60,7 +60,7 @@ resource "aws_vpc_security_group_ingress_rule" "lbnginx_80_443" {
   ip_protocol       = "tcp"
   description       = "Ingress HTTP/HTTPS from all"
   tags              = { Name = "${var.project_name}-${var.env}-nginx-${each.value}" }
-  }
+}
 
 # Traffic from LB to App
 resource "aws_vpc_security_group_ingress_rule" "app_from_lb" {
@@ -94,11 +94,11 @@ resource "aws_vpc_security_group_ingress_rule" "consul_internal" {
 }
 
 # Consul UI access only from internal network
-# resource "aws_vpc_security_group_ingress_rule" "consul_tcp_8500" {
-#   security_group_id = aws_security_group.consul.id
-#   cidr_ipv4         = var.vpc_cidr
-#   from_port         = 8500
-#   to_port           = 8500
-#   ip_protocol       = "tcp"
-#   tags              = { Name = "${var.project_name}-${var.env}-consul-tcp-8500" }
-# }
+resource "aws_vpc_security_group_ingress_rule" "consul_tcp_8500" {
+  security_group_id = aws_security_group.consul.id
+  cidr_ipv4         = var.vpc_cidr
+  from_port         = 8500
+  to_port           = 8500
+  ip_protocol       = "tcp"
+  tags              = { Name = "${var.project_name}-${var.env}-consul-tcp-8500" }
+}

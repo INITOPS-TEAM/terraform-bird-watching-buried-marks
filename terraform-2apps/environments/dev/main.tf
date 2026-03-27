@@ -45,7 +45,7 @@ module "jenkins" {
   env                   = var.env
   ami_id                = var.ami_id
   instance_type_jenkins = var.instance_type_jenkins
-  consul_sg_id = module.birdwatching.consul_sg_id
+  consul_sg_id          = module.birdwatching.consul_sg_id
   nat_az                = var.nat_az
   key_name              = aws_key_pair.this.key_name
   vpc_id                = module.vpc.vpc_id
@@ -73,4 +73,17 @@ module "birdwatching" {
   app_role_name             = module.iam.app_role_name
   iam_instance_profile_name = module.iam.app_instance_profile_name
   ssm_instance_profile_name = module.iam.ssm_instance_profile_name
+}
+
+module "buried_marks" {
+  source       = "../../modules/apps/buried_marks"
+  project_name = var.project_name
+  app2         = var.app2
+  ver_eso      = var.ver_eso
+  vpc_id       = module.vpc.vpc_id
+  env          = var.env
+  aws_region   = var.aws_region
+  db_instance_class = var.db_instance_class
+  compute_subnet_ids = module.vpc.compute_subnet_ids
+  eks_nodes_sg_id = module.eks.nodes_security_group_id
 }

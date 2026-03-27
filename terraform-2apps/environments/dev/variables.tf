@@ -6,6 +6,10 @@ variable "env" {
   type = string
 }
 
+variable "app2" {
+  type = string
+}
+
 variable "aws_region" {
   type = string
 }
@@ -56,4 +60,12 @@ variable "compute_subnets" {
 
 variable "eks_subnets" {
   type = map(string)
+}
+
+variable "ver_eso" {
+  type = string
+}
+
+variable "db_instance_class" {
+  type    = string
 }
