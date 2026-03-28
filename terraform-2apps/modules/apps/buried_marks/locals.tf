@@ -14,13 +14,14 @@ locals {
     auth_secret   = jsondecode(data.aws_secretsmanager_secret_version.auth.secret_string)
     map_secret    = jsondecode(data.aws_secretsmanager_secret_version.map.secret_string)
     voting_secret = jsondecode(data.aws_secretsmanager_secret_version.voting.secret_string)
+    mar_eng_v     = "11.4"
+    postg_eng_v   = "18"
 
     db_defaults = {
         instance_class         = var.db_instance_class
-        allocated_storage      = 5
-        db_subnet_group_name   = aws_db_subnet_group.this.name
-        vpc_security_group_ids = [aws_security_group.rds.id]
-        skip_final_snapshot    = var.env ==  false
+        allocated_storage      = 10
+        skip_final_snapshot    = false
+        final_snapshot_time = formatdate("DDMMYY-hhmm", timestamp())
     
     }
     common_tags = {
@@ -30,6 +31,3 @@ locals {
     ManagedBy   = "Terraform"
     }
 }
-
-
-

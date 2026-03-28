@@ -9,7 +9,7 @@ resource "helm_release" "eso" {
 
 data "aws_caller_identity" "current" {}
 
-resource "kubernetes_namespace" "buried_marks" {
+resource "kubernetes_namespace_v1" "buried_marks" {
     metadata {
         name = var.app2
     }
@@ -40,10 +40,10 @@ resource "aws_iam_access_key" "eso" {
     user = aws_iam_user.eso.name
 }
 
-resource "kubernetes_secret" "eso_aws_creds" {
+resource "kubernetes_secret_v1" "eso_aws_creds" {
     metadata {
         name      = "aws-sm-credentials"
-        namespace = kubernetes_namespace.buried_marks.metadata[0].name
+        namespace = kubernetes_namespace_v1.buried_marks.metadata[0].name
     }
 
     data = {
@@ -51,5 +51,5 @@ resource "kubernetes_secret" "eso_aws_creds" {
         "secret-access-key" = aws_iam_access_key.eso.secret
     }
 
-    depends_on = [kubernetes_namespace.buried_marks]
+    depends_on = [kubernetes_namespace_v1.buried_marks]
     }
