@@ -21,9 +21,3 @@ module "s3_db_backup" {
   versioning_status = "Enabled"
 }
 
-module "dns" {
-  source = "../../shared/dns"
-  env         = var.env
-  domain_name = var.domain_name
-  lb_ip       = aws_instance.lb.public_ip
-}

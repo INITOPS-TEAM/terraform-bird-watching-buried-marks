@@ -58,6 +58,11 @@ module "jenkins" {
   vpc_cidr              = module.vpc.vpc_cidr
   compute_subnet_id     = module.vpc.compute_subnet_id
 }
+module "dns" {
+  source = "../../modules/shared/dns"
+
+  domain_name = var.domain_name
+}
 
 module "birdwatching" {
   source = "../../modules/apps/birdwatching"
@@ -69,14 +74,27 @@ module "birdwatching" {
   key_name           = aws_key_pair.this.key_name
   app_instance_count = var.app_instance_count
   domain_name        = var.domain_name
-
-  vpc_id            = module.vpc.vpc_id
-  vpc_cidr          = module.vpc.vpc_cidr
-  compute_subnet_id = module.vpc.compute_subnet_id
-  public_subnet_id  = module.vpc.public_subnet_id
+  zone_id            = module.dns.zone_id
+  vpc_id             = module.vpc.vpc_id
+  vpc_cidr           = module.vpc.vpc_cidr
+  compute_subnet_id  = module.vpc.compute_subnet_id
+  public_subnet_id   = module.vpc.public_subnet_id
 
   jenkins_sg_id             = module.jenkins.jenkins_sg_id
   app_role_name             = module.iam.app_role_name
   iam_instance_profile_name = module.iam.app_instance_profile_name
   ssm_instance_profile_name = module.iam.ssm_instance_profile_name
+}
+
+module "buried_marks" {
+  source             = "../../modules/apps/buried_marks"
+  project_name       = var.project_name
+  app2               = var.app2
+  ver_eso            = var.ver_eso
+  vpc_id             = module.vpc.vpc_id
+  env                = var.env
+  aws_region         = var.aws_region
+  db_instance_class  = var.db_instance_class
+  compute_subnet_ids = module.vpc.compute_subnet_ids
+  eks_nodes_sg_id    = module.eks.nodes_security_group_id
 }

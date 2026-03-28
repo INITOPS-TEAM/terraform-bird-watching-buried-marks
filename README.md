@@ -49,6 +49,19 @@ aws sts get-caller-identity
 
 ## 4. Starting the project
 
+***Pre-requisites (Important)***
+
+Before running Terraform, you must ensure that a Route 53 Hosted Zone
+exists in your AWS account for your environment.
+
+***For Dev:*** Create a public hosted zone named dev.domen.name
+
+***For Stage:*** Create a public hosted zone named stage.domen.name
+
+***For Prod:*** Create a public hosted zone named prod.domen.name
+
+Note: After creating the zone, ensure its Name Servers (NS) are updated at your domain registrar
+
 ### Running Terraform
 
 ```bash
