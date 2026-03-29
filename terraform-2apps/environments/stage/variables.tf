@@ -14,6 +14,10 @@ variable "env" {
   type = string
 }
 
+variable "app2" {
+  type = string
+}
+
 variable "public_key_path" {
   type = string
 }
@@ -63,5 +67,13 @@ variable "eks_subnets" {
 }
 
 variable "namespace" {
+  type = string
+}
+
+variable "ver_eso" {
+  type = string
+}
+
+variable "db_instance_class" {
   type = string
 }

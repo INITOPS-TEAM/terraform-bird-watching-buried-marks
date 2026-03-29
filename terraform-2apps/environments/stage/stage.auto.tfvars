@@ -1,6 +1,7 @@
 env                   = "stage"
 aws_region            = "eu-north-1"
 project_name          = "bird"
+app2                  = "buried-marks"
 ami_id                = "ami-080254318c2d8932f"
 instance_type         = "t3.micro"
 instance_type_jenkins = "t3.small"
@@ -26,3 +27,7 @@ eks_subnets = {
   "eu-north-1a" = "10.20.128.0/20"
   "eu-north-1b" = "10.20.144.0/20"
 }
+
+ver_eso = "2.2.0"
+
+db_instance_class = "db.t3.micro"
