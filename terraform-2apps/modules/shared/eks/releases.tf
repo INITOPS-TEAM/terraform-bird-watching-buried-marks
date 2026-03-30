@@ -40,6 +40,22 @@ resource "helm_release" "envoy_gw_api" {
   repository = "oci://docker.io/envoyproxy"
   version    = "1.7.1"
   chart      = "gateway-helm"
+
+  set = [
+    {
+      name  = "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
+      value = aws_acm_certificate_validation.marks.certificate_arn
+    },
+    {
+      name  = "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"
+      value = "443"
+      type  = "string"
+    },
+    {
+      name  = "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-backend-protocol"
+      value = "http"
+    }
+  ]
 }
 
 resource "helm_release" "gateway" {

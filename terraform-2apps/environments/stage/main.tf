@@ -38,6 +38,14 @@ module "eks" {
   min_size       = 2
   max_size       = 5
   instance_types = ["t3.small"]
+
+  zone_id      = module.dns.zone_id
+  domain_name = var.domain_name
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "iam" {
@@ -101,4 +109,8 @@ module "buried_marks" {
   db_instance_class  = var.db_instance_class
   compute_subnet_ids = module.vpc.compute_subnet_ids
   eks_nodes_sg_id    = module.eks.nodes_security_group_id
+
+  zone_id            = module.dns.zone_id
+  domain_name = var.domain_name
+  cluster_name = var.cluster_name
 }

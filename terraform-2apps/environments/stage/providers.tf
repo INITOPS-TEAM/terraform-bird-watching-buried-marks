@@ -22,4 +22,12 @@ provider "helm" {
       args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
     }
   }
+
+  registries = [
+    {
+      url      = "oci://492052863680.dkr.ecr.eu-north-1.amazonaws.com"
+      username = data.aws_ecr_authorization_token.token.user_name
+      password = data.aws_ecr_authorization_token.token.password
+    }
+  ]
 }

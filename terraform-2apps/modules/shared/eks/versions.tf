@@ -6,19 +6,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
-  }
-}
-
-provider "helm" {
-  kubernetes = {
-    config_path = "~/.kube/config"
-  }
-
-  registries = [
-    {
-      url      = local.repository
-      username = var.ecr_username
-      password = var.ecr_password
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
     }
-  ]
+    helm = {
+      source  = "hashicorp/helm"
+    }
+  }
 }

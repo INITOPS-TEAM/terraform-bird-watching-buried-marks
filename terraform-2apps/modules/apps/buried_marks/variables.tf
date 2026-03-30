@@ -37,3 +37,17 @@ variable "db_instance_class" {
 variable "compute_subnet_ids" {
     type = list(string)
 }
+
+variable "domain_name" {
+    description = "base part of domain name"
+    type = string
+}
+
+variable "zone_id" {
+    description = "Route53 Zone ID passed from the environment level"
+    type        = string
+}
+
+variable "cluster_name" {
+    type = string
+}
