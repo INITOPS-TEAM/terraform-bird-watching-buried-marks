@@ -73,3 +73,15 @@ variable "ecr_username" {
 variable "ecr_password" {
   type = string
 }
+
+variable "app2" {
+  type = string
+}
+
+variable "env" {
+  type = string
+}
+
+variable "ver_eso" {
+  type = string
+}

@@ -5,3 +5,11 @@ output "lb_public_ip" {
 output "consul_sg_id" {
   value = aws_security_group.consul.id
 }
+
+# output "lb_domain" {
+#   value = aws_instance.lb.lb_domain
+# }
+
+# output "nameservers" {
+#   value =
+# }

@@ -10,11 +10,35 @@ resource "kubernetes_namespace_v1" "envoy_gw_api" {
   }
 }
 
+# resource "kubernetes_namespace_v1" "gateway_api_controller" {
+#   metadata {
+#     name = "aws-application-networking-system"
+#   }
+# }
+
+# resource "helm_release" "gateway_api_controller" {
+#   name       = "gateway-api-controller"
+#   namespace  = kubernetes_namespace_v1.gateway_api_controller.metadata[0].name
+#   repository = "oci://public.ecr.aws/aws-application-networking-k8s"
+#   version    = "v2.0.0"
+#   chart      = "aws-gateway-controller-chart"
+#   set = [
+#     {
+#       name  = "serviceAccount.create"
+#       value = false
+#     },
+#     {
+#       name  = "log.level"
+#       value = "debug"
+#     }
+#   ]
+# }
+
 resource "helm_release" "envoy_gw_api" {
   name       = "envoy-gw"
   namespace  = kubernetes_namespace_v1.envoy_gw_api.metadata[0].name
   repository = "oci://docker.io/envoyproxy"
-  version    = "1.5.9"
+  version    = "1.7.1"
   chart      = "gateway-helm"
 }
 
@@ -24,6 +48,20 @@ resource "helm_release" "gateway" {
   repository = local.repository
   version    = "0.1.0"
   chart      = "buried-marks-helm-gateway"
+  set = [
+    {
+      name  = "listeners[0].name"
+      value = "http"
+    },
+    {
+      name  = "listeners[0].port"
+      value = "80"
+    },
+    {
+      name  = "listeners[0].protocol"
+      value = "HTTP"
+    }
+  ]
   depends_on = [
     helm_release.envoy_gw_api
   ]
@@ -59,20 +97,20 @@ resource "helm_release" "map_microservice" {
   }]
 }
 
-resource "helm_release" "mail_microservice" {
-  name       = "mail-service"
-  namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
-  repository = local.repository
-  version    = "0.1.0"
-  chart      = "buried-marks-helm-mail-microservice"
-  depends_on = [
-    helm_release.gateway
-  ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "mail-microservice"
-  }]
-}
+# resource "helm_release" "mail_microservice" {
+#   name       = "mail-service"
+#   namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
+#   repository = local.repository
+#   version    = "0.1.0"
+#   chart      = "buried-marks-helm-mail-microservice"
+#   depends_on = [
+#     helm_release.gateway
+#   ]
+#   set = [{
+#     name  = "fullnameOverride"
+#     value = "mail-microservice"
+#   }]
+# }
 
 resource "helm_release" "voting_microservice" {
   name       = "voting-service"
@@ -125,9 +163,9 @@ resource "helm_release" "admin_front" {
   repository = local.repository
   version    = "0.1.0"
   chart      = "buried-marks-helm-admin-front"
-  depends_on = [
-    helm_release.mail_microservice
-  ]
+  # depends_on = [
+  #   helm_release.mail_microservice
+  # ]
   set = [{
     name  = "fullnameOverride"
     value = "admin-front"

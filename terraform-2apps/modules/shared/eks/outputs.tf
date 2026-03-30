@@ -19,9 +19,9 @@ output "oidc_provider_url" {
   description = "OIDC provider URL"
 }
 
-output "gateway_api_controller_role_arn" {
-  value = aws_iam_role.gateway_api_controller.arn
-}
+# output "gateway_api_controller_role_arn" {
+#   value = aws_iam_role.vpc_lattice_controller.arn
+# }
 
 output "nodes_security_group_id" {
   description = "ID of the security group for EKS worker nodes. Required for allowing access to RDS from EKS."
