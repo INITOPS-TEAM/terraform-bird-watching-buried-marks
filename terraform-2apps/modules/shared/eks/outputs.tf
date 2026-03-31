@@ -18,3 +18,12 @@ output "oidc_provider_url" {
   value       = aws_eks_cluster.main.identity[0].oidc[0].issuer
   description = "OIDC provider URL"
 }
+
+# output "gateway_api_controller_role_arn" {
+#   value = aws_iam_role.vpc_lattice_controller.arn
+# }
+
+output "nodes_security_group_id" {
+  description = "ID of the security group for EKS worker nodes. Required for allowing access to RDS from EKS."
+  value       = aws_security_group.eks_nodes.id
+}

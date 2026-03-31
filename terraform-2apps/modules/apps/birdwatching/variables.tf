@@ -57,3 +57,8 @@ variable "ssm_instance_profile_name" {
 variable "domain_name" {
   type = string
 }
+
+variable "zone_id" {
+  description = "Route53 Zone ID passed from the environment level"
+  type        = string
+}

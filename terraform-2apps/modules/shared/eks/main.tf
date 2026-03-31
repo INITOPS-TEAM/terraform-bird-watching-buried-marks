@@ -75,9 +75,9 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_resource_controller" {
 
 # EKS Cluster
 resource "aws_eks_cluster" "main" {
-  name            = var.cluster_name
-  role_arn        = aws_iam_role.eks_cluster_role.arn
-  version         = var.kubernetes_version
+  name     = var.cluster_name
+  role_arn = aws_iam_role.eks_cluster_role.arn
+  version  = var.kubernetes_version
 
   vpc_config {
     subnet_ids         = var.eks_subnets
@@ -93,11 +93,6 @@ resource "aws_eks_cluster" "main" {
     aws_iam_role_policy_attachment.eks_cluster_policy,
     aws_iam_role_policy_attachment.eks_vpc_resource_controller,
   ]
-}
-
-# OIDC Provider for IRSA
-data "tls_certificate" "cluster" {
-  url = aws_eks_cluster.main.identity[0].oidc[0].issuer
 }
 
 resource "aws_iam_openid_connect_provider" "main" {
