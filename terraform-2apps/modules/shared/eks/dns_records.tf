@@ -13,5 +13,7 @@ resource "aws_route53_record" "marks_custom_domain" {
   type    = "CNAME"
   ttl     = 300
 
-  records = [data.kubernetes_service_v1.envoy_lb.status.0.load_balancer.0.ingress.0.hostname]
+  records = [
+    try(data.kubernetes_service_v1.envoy_lb.status[0].load_balancer[0].ingress[0].hostname, "pending-lb-address")
+  ]
 }
