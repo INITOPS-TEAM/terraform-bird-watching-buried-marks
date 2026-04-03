@@ -1,6 +1,5 @@
 resource "aws_acm_certificate" "marks" {
   domain_name               = "marks.${var.domain_name}"
-  subject_alternative_names = ["*.marks.${var.domain_name}"]
   validation_method         = "DNS"
 
   lifecycle {
