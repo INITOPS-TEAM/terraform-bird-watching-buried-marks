@@ -5,6 +5,24 @@ resource "aws_security_group" "eks_cluster" {
   vpc_id      = var.vpc_id
 }
 
+resource "aws_eks_access_entry" "jenkins" {
+  cluster_name  = aws_eks_cluster.main.name
+  principal_arn = var.jenkins_role_arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "jenkins_admin" {
+  cluster_name  = aws_eks_cluster.main.name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = var.jenkins_role_arn
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [aws_eks_access_entry.jenkins]
+}
+
 resource "aws_security_group_rule" "eks_cluster_ingress" {
   type              = "ingress"
   from_port         = 443
