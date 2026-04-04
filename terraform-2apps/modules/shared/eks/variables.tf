@@ -26,7 +26,7 @@ variable "node_group_name" {
 
 variable "desired_size" {
   type        = number
-  default     = 2
+  default     = 4
   description = "Desired number of nodes"
 }
 
@@ -94,7 +94,7 @@ variable "domain_name" {
   type = string
 }
 
-variable "jenkins_role_arn" {
-  description = "ARN of the Jenkins IAM Role for EKS access"
-  type        = string
-}
+# variable "jenkins_role_arn" {
+#   description = "ARN of the Jenkins IAM Role for EKS access"
+#   type        = string
+# }

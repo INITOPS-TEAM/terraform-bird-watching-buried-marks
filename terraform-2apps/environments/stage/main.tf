@@ -34,7 +34,7 @@ module "eks" {
   ver_eso      = var.ver_eso
 
 
-  desired_size   = 3
+  desired_size   = 4
   min_size       = 2
   max_size       = 5
   instance_types = ["t3.small"]

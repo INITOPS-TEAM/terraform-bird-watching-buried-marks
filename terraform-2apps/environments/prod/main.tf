@@ -33,13 +33,16 @@ module "eks" {
   app2         = var.app2
   ver_eso      = var.ver_eso
 
-  desired_size   = 2
-  min_size       = 1
-  max_size       = 3
+
+  desired_size   = 4
+  min_size       = 2
+  max_size       = 5
   instance_types = ["t3.small"]
 
   zone_id      = module.dns.zone_id
-  domain_name  = var.domain_name
+  domain_name = var.domain_name
+
+  # jenkins_role_arn = module.jenkins.jenkins_role_arn
 
   providers = {
     kubernetes = kubernetes
@@ -54,47 +57,48 @@ module "iam" {
   env          = var.env
 }
 
-module "jenkins" {
-  source = "../../modules/shared/Jenkins"
+# module "jenkins" {
+#   source = "../../modules/shared/Jenkins"
 
-  project_name          = var.project_name
-  env                   = var.env
-  ami_id                = var.ami_id
-  instance_type_jenkins = var.instance_type_jenkins
-  consul_sg_id          = module.birdwatching.consul_sg_id
-  nat_az                = var.nat_az
-  key_name              = aws_key_pair.this.key_name
-  vpc_id                = module.vpc.vpc_id
-  vpc_cidr              = module.vpc.vpc_cidr
-  compute_subnet_id     = module.vpc.compute_subnet_id
-}
+#   project_name          = var.project_name
+#   env                   = var.env
+#   ami_id                = var.ami_id
+#   instance_type_jenkins = var.instance_type_jenkins
+#   consul_sg_id          = module.birdwatching.consul_sg_id
+#   nat_az                = var.nat_az
+#   key_name              = aws_key_pair.this.key_name
+#   vpc_id                = module.vpc.vpc_id
+#   vpc_cidr              = module.vpc.vpc_cidr
+#   compute_subnet_id     = module.vpc.compute_subnet_id
+# }
+
 module "dns" {
   source = "../../modules/shared/dns"
 
   domain_name = var.domain_name
 }
 
-module "birdwatching" {
-  source = "../../modules/apps/birdwatching"
+# module "birdwatching" {
+#   source = "../../modules/apps/birdwatching"
 
-  project_name       = var.project_name
-  env                = var.env
-  ami_id             = var.ami_id
-  instance_type      = var.instance_type
-  key_name           = aws_key_pair.this.key_name
-  app_instance_count = var.app_instance_count
-  domain_name        = var.domain_name
-  zone_id            = module.dns.zone_id
-  vpc_id             = module.vpc.vpc_id
-  vpc_cidr           = module.vpc.vpc_cidr
-  compute_subnet_id  = module.vpc.compute_subnet_id
-  public_subnet_id   = module.vpc.public_subnet_id
+#   project_name       = var.project_name
+#   env                = var.env
+#   ami_id             = var.ami_id
+#   instance_type      = var.instance_type
+#   key_name           = aws_key_pair.this.key_name
+#   app_instance_count = var.app_instance_count
+#   domain_name        = var.domain_name
+#   zone_id            = module.dns.zone_id
+#   vpc_id             = module.vpc.vpc_id
+#   vpc_cidr           = module.vpc.vpc_cidr
+#   compute_subnet_id  = module.vpc.compute_subnet_id
+#   public_subnet_id   = module.vpc.public_subnet_id
 
-  jenkins_sg_id             = module.jenkins.jenkins_sg_id
-  app_role_name             = module.iam.app_role_name
-  iam_instance_profile_name = module.iam.app_instance_profile_name
-  ssm_instance_profile_name = module.iam.ssm_instance_profile_name
-}
+#   jenkins_sg_id             = module.jenkins.jenkins_sg_id
+#   app_role_name             = module.iam.app_role_name
+#   iam_instance_profile_name = module.iam.app_instance_profile_name
+#   ssm_instance_profile_name = module.iam.ssm_instance_profile_name
+# }
 
 module "buried_marks" {
   source             = "../../modules/apps/buried_marks"
@@ -108,7 +112,7 @@ module "buried_marks" {
   compute_subnet_ids = module.vpc.compute_subnet_ids
   eks_nodes_sg_id    = module.eks.nodes_security_group_id
 
-  zone_id      = module.dns.zone_id
-  domain_name  = var.domain_name
+  zone_id            = module.dns.zone_id
+  domain_name = var.domain_name
   cluster_name = var.cluster_name
 }

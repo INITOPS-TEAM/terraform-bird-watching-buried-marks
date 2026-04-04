@@ -10,6 +10,12 @@ resource "kubernetes_namespace_v1" "envoy_gw_api" {
   }
 }
 
+resource "kubernetes_namespace_v1" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}
+
 resource "helm_release" "envoy_gw_api" {
   name       = "envoy-gw"
   namespace  = kubernetes_namespace_v1.envoy_gw_api.metadata[0].name
@@ -23,7 +29,7 @@ resource "helm_release" "gateway" {
   name       = "gateway"
   namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
   repository = local.repository
-  version    = "0.3.1"
+  version    = "0.2.0"
   chart      = "buried-marks-helm-gateway"
   depends_on = [helm_release.envoy_gw_api]
 
@@ -150,4 +156,37 @@ resource "helm_release" "voting_front" {
     name  = "fullnameOverride"
     value = "voting-front"
   }]
+}
+
+resource "helm_release" "monitoring" {
+  name       = "monitoring"
+  namespace  = kubernetes_namespace_v1.monitoring.metadata[0].name
+  repository = local.repository
+  version    = "0.1.0"
+  chart      = "buried-marks-helm-monitoring"
+
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "monitoring"
+    },
+    {
+      name  = "kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName"
+      value = "gp2-ebs"
+    },
+    {
+      name  = "kube-prometheus-stack.alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName"
+      value = "gp2-ebs"
+    },
+    {
+      name  = "kube-prometheus-stack.grafana.persistence.storageClassName"
+      value = "gp2-ebs"
+    },
+    {
+      name  = "kube-prometheus-stack.grafana.persistence.enabled"
+      value = "true"
+    }
+  ]
+
+  depends_on = [kubernetes_storage_class_v1.ebs_gp2]
 }
