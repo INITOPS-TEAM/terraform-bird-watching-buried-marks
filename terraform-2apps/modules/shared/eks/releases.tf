@@ -29,7 +29,7 @@ resource "helm_release" "gateway" {
   name       = "gateway"
   namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
   repository = local.repository
-  version    = "0.3.1"
+  version    = "0.2.0"
   chart      = "buried-marks-helm-gateway"
   depends_on = [helm_release.envoy_gw_api]
 

@@ -11,5 +11,7 @@ resource "aws_route53_record" "marks_custom_domain" {
   name    = "marks.${var.domain_name}"
   type    = "CNAME"
   ttl     = 300
-  records = [data.kubernetes_resources.envoy_lb.objects[0].status.loadBalancer.ingress[0].hostname]
+  records = [
+    try(data.kubernetes_resources.envoy_lb.objects[0].status.loadBalancer.ingress[0].hostname, "")
+  ]
 }

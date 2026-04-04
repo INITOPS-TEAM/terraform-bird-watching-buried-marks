@@ -94,7 +94,7 @@ variable "domain_name" {
   type = string
 }
 
-variable "jenkins_role_arn" {
-  description = "ARN of the Jenkins IAM Role for EKS access"
-  type        = string
-}
+# variable "jenkins_role_arn" {
+#   description = "ARN of the Jenkins IAM Role for EKS access"
+#   type        = string
+# }

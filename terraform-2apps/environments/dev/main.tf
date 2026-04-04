@@ -29,12 +29,22 @@ module "eks" {
   namespace    = var.namespace
   ecr_username = data.aws_ecr_authorization_token.token.user_name
   ecr_password = data.aws_ecr_authorization_token.token.password
-
+  env          = var.env
+  app2         = var.app2
+  ver_eso      = var.ver_eso
 
   desired_size   = 2
   min_size       = 1
   max_size       = 3
   instance_types = ["t3.small"]
+
+  zone_id      = module.dns.zone_id
+  domain_name  = var.domain_name
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "iam" {
@@ -97,4 +107,8 @@ module "buried_marks" {
   db_instance_class  = var.db_instance_class
   compute_subnet_ids = module.vpc.compute_subnet_ids
   eks_nodes_sg_id    = module.eks.nodes_security_group_id
+
+  zone_id      = module.dns.zone_id
+  domain_name  = var.domain_name
+  cluster_name = var.cluster_name
 }
