@@ -42,6 +42,8 @@ module "eks" {
   zone_id      = module.dns.zone_id
   domain_name = var.domain_name
 
+  # jenkins_role_arn = module.jenkins.jenkins_role_arn
+
   providers = {
     kubernetes = kubernetes
     helm       = helm
