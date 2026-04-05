@@ -36,9 +36,13 @@ resource "aws_iam_access_key" "eso" {
 }
 
 resource "kubernetes_secret_v1" "eso_aws_creds" {
+  for_each = {
+    buried_marks = kubernetes_namespace_v1.buried_marks.metadata[0].name
+    monitoring   = kubernetes_namespace_v1.monitoring.metadata[0].name
+  }
   metadata {
     name      = "aws-sm-credentials"
-    namespace = kubernetes_namespace_v1.buried_marks.metadata[0].name
+    namespace = each.value
   }
 
   data = {
@@ -46,5 +50,8 @@ resource "kubernetes_secret_v1" "eso_aws_creds" {
     "secret-access-key" = aws_iam_access_key.eso.secret
   }
 
-  depends_on = [kubernetes_namespace_v1.buried_marks]
+  depends_on = [
+    kubernetes_namespace_v1.buried_marks,
+    kubernetes_namespace_v1.monitoring
+  ]
 }
