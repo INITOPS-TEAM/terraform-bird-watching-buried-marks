@@ -86,7 +86,28 @@ resource "helm_release" "map_microservice" {
   set = [{
     name  = "fullnameOverride"
     value = "map-microservice"
-  }]
+    },
+    {
+      name  = "httpRoute.rules[0].matches[0].path.value"
+      value = "/map/api/"
+    },
+    {
+      name  = "httpRoute.rules[0].matches[0].path.type"
+      value = "PathPrefix"
+    },
+    {
+      name  = "httpRoute.rules[0].filters[0].type"
+      value = "URLRewrite"
+    },
+    {
+      name  = "httpRoute.rules[0].filters[0].urlRewrite.path.replacePrefixMatch"
+      value = "/api/"
+    },
+    {
+      name  = "httpRoute.rules[0].filters[0].urlRewrite.path.type"
+      value = "ReplacePrefixMatch"
+    }
+  ]
 }
 
 resource "helm_release" "mail_microservice" {
