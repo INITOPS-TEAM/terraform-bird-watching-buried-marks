@@ -25,7 +25,7 @@ provider "helm" {
 
   registries = [
     {
-      url      = "oci://492052863680.dkr.ecr.eu-north-1.amazonaws.com"
+      url      = "oci://${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
       username = data.aws_ecr_authorization_token.token.user_name
       password = data.aws_ecr_authorization_token.token.password
     }

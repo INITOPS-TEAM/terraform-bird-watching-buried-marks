@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket       = "stage-s3-project-buried-marks-and-birdwatching-terraform-state"
-    key          = "stage-state/terraform.tfstate"
+    bucket       = "dev-s3-project-buried-marks-and-birdwatching-terraform-state-01"
+    key          = "dev-state/terraform.tfstate"
     region       = "eu-north-1"
     encrypt      = true
     use_lockfile = true

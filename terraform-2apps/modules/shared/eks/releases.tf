@@ -22,7 +22,7 @@ resource "helm_release" "envoy_gw_api" {
   repository = "oci://docker.io/envoyproxy"
   version    = "1.7.1"
   chart      = "gateway-helm"
-  depends_on = [aws_acm_certificate_validation.marks]
+  # depends_on = [aws_acm_certificate_validation.marks]
 }
 
 resource "helm_release" "gateway" {
@@ -48,12 +48,31 @@ resource "helm_release" "authentication_microservice" {
   version    = "0.1.1"
   chart      = "buried-marks-helm-authentication-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "authentication-microservice"
-  }]
+  set = [
+    {
+      name  = "image.pullPolicy"
+      value = "Always"
+    },
+    {
+      name  = "fullnameOverride"
+      value = "authentication-microservice"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-authentication-microservice"
+    },
+    {
+      name  = "db.host"
+      value = var.host_postgres_rds
+    },
+    {
+      name  = "db.port"
+      value = "5432"
+    },
+  ]
 }
 
 resource "helm_release" "map_microservice" {
@@ -63,12 +82,39 @@ resource "helm_release" "map_microservice" {
   version    = "0.1.1"
   chart      = "buried-marks-helm-map-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "map-microservice"
-  }]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "map-microservice"
+    },
+    {
+      name  = "httpRoute.rules[0].matches[0].path.value"
+      value = "/map/api/"
+    },
+    {
+      name  = "httpRoute.rules[0].matches[0].path.type"
+      value = "PathPrefix"
+    },
+    {
+      name  = "httpRoute.rules[0].filters[0].type"
+      value = "URLRewrite"
+    },
+    {
+      name  = "httpRoute.rules[0].filters[0].urlRewrite.path.replacePrefixMatch"
+      value = "/api/"
+    },
+    {
+      name  = "httpRoute.rules[0].filters[0].urlRewrite.path.type"
+      value = "ReplacePrefixMatch"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-map-microservice"
+    }
+  ]
 }
 
 resource "helm_release" "mail_microservice" {
@@ -78,12 +124,19 @@ resource "helm_release" "mail_microservice" {
   version    = "0.1.0"
   chart      = "buried-marks-helm-mail-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "mail-microservice"
-  }]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "mail-microservice"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-mail-microservice"
+    }
+  ]
 }
 
 resource "helm_release" "voting_microservice" {
@@ -93,12 +146,18 @@ resource "helm_release" "voting_microservice" {
   version    = "0.1.1"
   chart      = "buried-marks-helm-voting-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
   set = [{
     name  = "fullnameOverride"
     value = "voting-microservice"
-  }]
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-voting-microservice"
+    }
+  ]
 }
 
 resource "helm_release" "login_front" {
@@ -110,10 +169,16 @@ resource "helm_release" "login_front" {
   depends_on = [
     helm_release.authentication_microservice
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "login-front"
-  }]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "login-front"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-login-front"
+    }
+  ]
 }
 
 resource "helm_release" "map_front" {
@@ -125,10 +190,16 @@ resource "helm_release" "map_front" {
   depends_on = [
     helm_release.map_microservice
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "map-front"
-  }]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "map-front"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-map-front"
+    }
+  ]
 }
 
 resource "helm_release" "admin_front" {
@@ -137,10 +208,19 @@ resource "helm_release" "admin_front" {
   repository = local.repository
   version    = "0.1.1"
   chart      = "buried-marks-helm-admin-front"
-  set = [{
-    name  = "fullnameOverride"
-    value = "admin-front"
-  }]
+  depends_on = [
+    helm_release.mail_microservice
+  ]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "admin-front"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-admin-front"
+    }
+  ]
 }
 
 resource "helm_release" "voting_front" {
@@ -152,10 +232,16 @@ resource "helm_release" "voting_front" {
   depends_on = [
     helm_release.voting_microservice
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "voting-front"
-  }]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "voting-front"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-voting-front"
+    }
+  ]
 }
 
 resource "helm_release" "monitoring" {
@@ -164,29 +250,32 @@ resource "helm_release" "monitoring" {
   repository = local.repository
   version    = "0.1.0"
   chart      = "buried-marks-helm-monitoring"
+  depends_on = [
+    helm_release.eso
+  ]
 
   set = [
     {
       name  = "fullnameOverride"
       value = "monitoring"
     },
-    {
-      name  = "kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName"
-      value = "gp2-ebs"
-    },
-    {
-      name  = "kube-prometheus-stack.alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName"
-      value = "gp2-ebs"
-    },
-    {
-      name  = "kube-prometheus-stack.grafana.persistence.storageClassName"
-      value = "gp2-ebs"
-    },
-    {
-      name  = "kube-prometheus-stack.grafana.persistence.enabled"
-      value = "true"
-    }
+    # {
+    #   name  = "kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName"
+    #   value = "gp2-ebs"
+    # },
+    # {
+    #   name  = "kube-prometheus-stack.alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName"
+    #   value = "gp2-ebs"
+    # },
+    # {
+    #   name  = "kube-prometheus-stack.grafana.persistence.storageClassName"
+    #   value = "gp2-ebs"
+    # },
+    # {
+    #   name  = "kube-prometheus-stack.grafana.persistence.enabled"
+    #   value = "true"
+    # }
   ]
 
-  depends_on = [kubernetes_storage_class_v1.ebs_gp2]
+  # depends_on = [kubernetes_storage_class_v1.ebs_gp2]
 }

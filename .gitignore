@@ -17,3 +17,5 @@ terraform.rc
 .idea/
 *.swp
 *.swo
+
+**/test_pods/
