@@ -9,8 +9,9 @@ resource "aws_iam_policy" "eks_rds" {
           "rds-db:connect"
         ],
         "Resource" : [
-          "arn:aws:rds-db:${var.aws_region}:${var.account_id}:dbuser:*/*",
-          #   "arn:aws:rds-db:${var.aws_region}:${var.account_id}:dbuser:${aws_db_instance.auth.resource_id}/database_user"
+          "arn:aws:rds-db:${var.aws_region}:${var.account_id}:dbuser:${var.rds_auth_resource_id}/*",
+          "arn:aws:rds-db:${var.aws_region}:${var.account_id}:dbuser:${var.rds_map_resource_id}/*"
+
         ]
       }
     ]

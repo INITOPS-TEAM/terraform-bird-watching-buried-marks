@@ -106,3 +106,11 @@ variable "host_postgres_rds" {
 variable "host_mariadb_rds" {
   type = string
 }
+
+variable "rds_auth_resource_id" {
+  type = string
+}
+
+variable "rds_map_resource_id" {
+  type = string
+}
