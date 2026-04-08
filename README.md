@@ -69,3 +69,11 @@ terraform init
 terraform plan
 terraform apply
 ```
+
+### RDS
+
+For enabling RDS IAM authentication, it is needed to add target user to the following PostgreSQL group:
+
+```sql
+GRANT rds_iam TO <database_user>;
+```

@@ -62,7 +62,15 @@ resource "helm_release" "authentication_microservice" {
     {
       name  = "image.repository"
       value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-authentication-microservice"
-    }
+    },
+    {
+      name  = "db.host"
+      value = var.host_postgres_rds
+    },
+    {
+      name  = "db.port"
+      value = "5432"
+    },
   ]
 }
 
