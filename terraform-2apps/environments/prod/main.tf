@@ -20,20 +20,22 @@ module "vpc" {
 module "eks" {
   source = "../../modules/shared/eks"
 
-  cluster_name      = var.cluster_name
-  vpc_id            = module.vpc.vpc_id
-  eks_subnets       = module.vpc.eks_subnet_ids
-  node_subnets      = module.vpc.compute_subnet_ids
-  aws_region        = var.aws_region
-  account_id        = var.account_id
-  namespace         = var.namespace
-  ecr_username      = data.aws_ecr_authorization_token.token.user_name
-  ecr_password      = data.aws_ecr_authorization_token.token.password
-  env               = var.env
-  app2              = var.app2
-  ver_eso           = var.ver_eso
-  host_postgres_rds = module.buried_marks.host_postgres_rds
-  host_mariadb_rds  = module.buried_marks.host_mariadb_rds
+  cluster_name         = var.cluster_name
+  vpc_id               = module.vpc.vpc_id
+  eks_subnets          = module.vpc.eks_subnet_ids
+  node_subnets         = module.vpc.compute_subnet_ids
+  aws_region           = var.aws_region
+  account_id           = var.account_id
+  namespace            = var.namespace
+  ecr_username         = data.aws_ecr_authorization_token.token.user_name
+  ecr_password         = data.aws_ecr_authorization_token.token.password
+  env                  = var.env
+  app2                 = var.app2
+  ver_eso              = var.ver_eso
+  host_postgres_rds    = module.buried_marks.host_postgres_rds
+  host_mariadb_rds     = module.buried_marks.host_mariadb_rds
+  rds_auth_resource_id = module.buried_marks.rds_auth_resource_id
+  rds_map_resource_id  = module.buried_marks.rds_map_resource_id
 
   desired_size   = 4
   min_size       = 2

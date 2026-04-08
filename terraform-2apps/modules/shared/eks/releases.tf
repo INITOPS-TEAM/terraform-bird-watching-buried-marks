@@ -48,7 +48,8 @@ resource "helm_release" "authentication_microservice" {
   version    = "0.1.1"
   chart      = "buried-marks-helm-authentication-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
   set = [
     {
@@ -81,7 +82,8 @@ resource "helm_release" "map_microservice" {
   version    = "0.1.1"
   chart      = "buried-marks-helm-map-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
   set = [
     {
@@ -122,7 +124,8 @@ resource "helm_release" "mail_microservice" {
   version    = "0.1.0"
   chart      = "buried-marks-helm-mail-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
   set = [
     {
@@ -143,7 +146,8 @@ resource "helm_release" "voting_microservice" {
   version    = "0.1.1"
   chart      = "buried-marks-helm-voting-microservice"
   depends_on = [
-    helm_release.gateway
+    helm_release.gateway,
+    helm_release.eso
   ]
   set = [{
     name  = "fullnameOverride"
@@ -240,35 +244,38 @@ resource "helm_release" "voting_front" {
   ]
 }
 
-# resource "helm_release" "monitoring" {
-#   name       = "monitoring"
-#   namespace  = kubernetes_namespace_v1.monitoring.metadata[0].name
-#   repository = local.repository
-#   version    = "0.1.0"
-#   chart      = "buried-marks-helm-monitoring"
+resource "helm_release" "monitoring" {
+  name       = "monitoring"
+  namespace  = kubernetes_namespace_v1.monitoring.metadata[0].name
+  repository = local.repository
+  version    = "0.1.0"
+  chart      = "buried-marks-helm-monitoring"
+  depends_on = [
+    helm_release.eso
+  ]
 
-#   set = [
-#     {
-#       name  = "fullnameOverride"
-#       value = "monitoring"
-#     },
-#     {
-#       name  = "kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName"
-#       value = "gp2-ebs"
-#     },
-#     {
-#       name  = "kube-prometheus-stack.alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName"
-#       value = "gp2-ebs"
-#     },
-#     {
-#       name  = "kube-prometheus-stack.grafana.persistence.storageClassName"
-#       value = "gp2-ebs"
-#     },
-#     {
-#       name  = "kube-prometheus-stack.grafana.persistence.enabled"
-#       value = "true"
-#     }
-#   ]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "monitoring"
+    },
+    # {
+    #   name  = "kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName"
+    #   value = "gp2-ebs"
+    # },
+    # {
+    #   name  = "kube-prometheus-stack.alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName"
+    #   value = "gp2-ebs"
+    # },
+    # {
+    #   name  = "kube-prometheus-stack.grafana.persistence.storageClassName"
+    #   value = "gp2-ebs"
+    # },
+    # {
+    #   name  = "kube-prometheus-stack.grafana.persistence.enabled"
+    #   value = "true"
+    # }
+  ]
 
-#   depends_on = [kubernetes_storage_class_v1.ebs_gp2]
-# }
+  # depends_on = [kubernetes_storage_class_v1.ebs_gp2]
+}
