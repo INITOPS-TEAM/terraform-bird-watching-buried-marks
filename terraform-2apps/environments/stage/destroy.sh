@@ -7,4 +7,5 @@ terraform destroy \
     -target=module.birdwatching.aws_instance.consul \
     -target=module.vpc.aws_nat_gateway.this \
     -target=module.vpc.aws_eip.nat \
+    -target=module.landing \
     -target=module.eks
