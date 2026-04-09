@@ -3,7 +3,7 @@ resource "kubernetes_job_v1" "postgres_rds_enable_iam" {
     name = "postgres-rds-enable-iam"
   }
   spec {
-    ttl_seconds_after_finished = 1000
+    ttl_seconds_after_finished = 100
     template {
       metadata {}
       spec {
