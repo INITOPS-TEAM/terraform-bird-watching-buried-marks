@@ -6,7 +6,7 @@ resource "aws_security_group" "eks_cluster" {
 }
 
 resource "aws_eks_access_entry" "jenkins" {
-  cluster_name  = aws_eks_cluster.main.nam
+  cluster_name  = aws_eks_cluster.main.name
   principal_arn = var.jenkins_role_arn
   type          = "STANDARD"
 }
