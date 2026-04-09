@@ -11,7 +11,6 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
-
 variable "env" {
   type = string
 }

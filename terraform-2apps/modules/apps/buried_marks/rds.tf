@@ -37,6 +37,15 @@ resource "aws_vpc_security_group_ingress_rule" "rds_mariadb_from_eks" {
   ip_protocol       = "tcp"
 }
 
+resource "aws_vpc_security_group_egress_rule" "rds_egress" {
+  security_group_id = aws_security_group.rds.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 0
+  to_port           = 65535
+  ip_protocol       = "tcp"
+}
+
+
 # Postgres instance for the Auth service and voting service,
 resource "aws_db_instance" "auth" {
   identifier                          = "${var.app2}-${var.env}-auth-db"
@@ -50,12 +59,12 @@ resource "aws_db_instance" "auth" {
   username = local.auth_secret["DB_USER"]
   password = local.auth_secret["DB_PASSWORD"]
 
-  instance_class         = local.db_defaults.instance_class
-  allocated_storage      = local.db_defaults.allocated_storage
-  db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  skip_final_snapshot    = local.db_defaults.skip_final_snapshot
-  # final_snapshot_identifier = "${var.app2}-${var.env}-auth-and-voting-db-${local.db_defaults.final_snapshot_time}"
+  instance_class            = local.db_defaults.instance_class
+  allocated_storage         = local.db_defaults.allocated_storage
+  db_subnet_group_name      = aws_db_subnet_group.this.name
+  vpc_security_group_ids    = [aws_security_group.rds.id]
+  skip_final_snapshot       = local.db_defaults.skip_final_snapshot
+  final_snapshot_identifier = "${var.app2}-${var.env}-auth-and-voting-db"
 
   tags = merge(local.common_tags, {
     Name = "${var.app2}-${var.env}-auth-db"
@@ -75,12 +84,12 @@ resource "aws_db_instance" "map" {
   username = local.map_secret["MARIADB_USER"]
   password = local.map_secret["MARIADB_PASSWORD"]
 
-  instance_class         = local.db_defaults.instance_class
-  allocated_storage      = local.db_defaults.allocated_storage
-  db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  skip_final_snapshot    = local.db_defaults.skip_final_snapshot
-  # final_snapshot_identifier = "${var.app2}-${var.env}-map-db-${local.db_defaults.final_snapshot_time}"
+  instance_class            = local.db_defaults.instance_class
+  allocated_storage         = local.db_defaults.allocated_storage
+  db_subnet_group_name      = aws_db_subnet_group.this.name
+  vpc_security_group_ids    = [aws_security_group.rds.id]
+  skip_final_snapshot       = local.db_defaults.skip_final_snapshot
+  final_snapshot_identifier = "${var.app2}-${var.env}-map-db"
 
   tags = merge(local.common_tags, {
     Name = "${var.app2}-${var.env}-map-db"
