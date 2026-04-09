@@ -3,13 +3,14 @@ resource "kubernetes_job_v1" "postgres_rds_enable_iam" {
     name = "postgres-rds-enable-iam"
   }
   spec {
+    ttl_seconds_after_finished = 1000
     template {
       metadata {}
       spec {
         container {
           name    = "postgres-rds-enable-iam"
           image   = "alpine/psql:18.3"
-          command = ["psql", "postgresql://${local.auth_secret["DB_USER"]}:${local.auth_secret["DB_PASSWORD"]}@${var.auth_db_endpoint}/${local.auth_secret["DB_NAME"]}?sslmode=require", "-c", "GRANT rds_iam TO ${local.auth_secret["DB_USER"]};"]
+          command = ["sh", "-c", "psql postgresql://${local.auth_secret["DB_USER"]}:${local.auth_secret["DB_PASSWORD"]}@${var.auth_db_endpoint}/${local.auth_secret["DB_NAME"]}?sslmode=require -c 'GRANT rds_iam TO ${local.auth_secret["DB_USER"]};'; PSQL_EXIT_CODE=$?; if [ $PSQL_EXIT_CODE -eq '0' ]; then echo 'IAM authentication check is successfully completed'; exit 0; elif [ $PSQL_EXIT_CODE -eq '2' ]; then echo 'IAM authentication is already enabled for ${local.auth_secret["DB_USER"]} OR specified long-living password is incorrect'; exit 0; fi; exit 1"]
         }
         restart_policy = "Never"
       }
