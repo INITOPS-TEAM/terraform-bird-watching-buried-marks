@@ -17,3 +17,8 @@ output "rds_auth_resource_id" {
   value       = aws_db_instance.auth.resource_id
   description = "The RDS Resource ID of auth instance"
 }
+
+output "auth_db_endpoint" {
+  value       = aws_db_instance.auth.endpoint
+  description = "The RDS Endpoint of auth RDS"
+}
