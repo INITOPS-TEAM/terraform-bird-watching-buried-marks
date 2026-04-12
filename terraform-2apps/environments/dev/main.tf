@@ -120,3 +120,16 @@ module "buried_marks" {
   domain_name  = var.domain_name
   cluster_name = var.cluster_name
 }
+
+module "landing" {
+  source = "../../modules/apps/landing"
+  project_name = var.project_name
+  env          = var.env
+  domain_name  = var.domain_name
+  zone_id      = module.dns.zone_id
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}

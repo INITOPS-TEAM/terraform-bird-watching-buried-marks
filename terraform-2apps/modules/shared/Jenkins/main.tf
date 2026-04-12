@@ -74,6 +74,9 @@ resource "aws_instance" "jenkins" {
   subnet_id                   = var.compute_subnet_id
   associate_public_ip_address = false
 
+  lifecycle {
+    prevent_destroy = true
+  }
 
   vpc_security_group_ids = [
     aws_security_group.jenkins.id,
