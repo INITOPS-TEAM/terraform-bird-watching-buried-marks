@@ -18,13 +18,14 @@ resource "aws_iam_policy" "eks_rds" {
 }
 
 resource "aws_iam_role_policy_attachment" "eks_rds" {
-  role       = aws_iam_role.eks_rds_service.name
+  for_each   = toset(local.eks_rds_sa)
+  role       = aws_iam_role.eks_rds_service[each.key].name
   policy_arn = aws_iam_policy.eks_rds.arn
 }
 
 resource "aws_iam_role" "eks_rds_service" {
-  name = "EKS-RDS-service"
-
+  for_each = toset(local.eks_rds_sa)
+  name     = "EKS-RDS-service-${each.key}"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -54,5 +55,5 @@ resource "aws_eks_pod_identity_association" "eks_rds" {
   cluster_name    = aws_eks_cluster.main.name
   namespace       = kubernetes_namespace_v1.buried_marks.metadata[0].name
   service_account = each.key
-  role_arn        = aws_iam_role.eks_rds_service.arn
+  role_arn        = aws_iam_role.eks_rds_service[each.key].arn
 }

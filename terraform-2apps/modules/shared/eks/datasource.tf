@@ -6,3 +6,7 @@ data "tls_certificate" "cluster" {
 data "aws_secretsmanager_secret_version" "auth" {
   secret_id = "buried-marks/auth-service"
 }
+
+data "aws_secretsmanager_secret_version" "map" {
+  secret_id = "buried-marks/map-service"
+}

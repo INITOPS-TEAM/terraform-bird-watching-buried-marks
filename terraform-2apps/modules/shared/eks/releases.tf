@@ -53,10 +53,6 @@ resource "helm_release" "authentication_microservice" {
   ]
   set = [
     {
-      name  = "image.pullPolicy"
-      value = "Always"
-    },
-    {
       name  = "fullnameOverride"
       value = "authentication-microservice"
     },
@@ -113,7 +109,15 @@ resource "helm_release" "map_microservice" {
     {
       name  = "image.repository"
       value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-map-microservice"
-    }
+    },
+    {
+      name  = "db.host"
+      value = var.host_mariadb_rds
+    },
+    {
+      name  = "db.port"
+      value = "3306"
+    },
   ]
 }
 
@@ -149,14 +153,23 @@ resource "helm_release" "voting_microservice" {
     helm_release.gateway,
     helm_release.eso
   ]
-  set = [{
-    name  = "fullnameOverride"
-    value = "voting-microservice"
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "voting-microservice"
     },
     {
       name  = "image.repository"
       value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-voting-microservice"
-    }
+    },
+    {
+      name  = "db.host"
+      value = var.host_postgres_rds
+    },
+    {
+      name  = "db.port"
+      value = "5432"
+    },
   ]
 }
 
