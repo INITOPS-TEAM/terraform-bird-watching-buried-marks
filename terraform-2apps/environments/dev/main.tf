@@ -45,7 +45,7 @@ module "eks" {
   zone_id     = module.dns.zone_id
   domain_name = var.domain_name
 
-  # jenkins_role_arn = module.jenkins.jenkins_role_arn
+  jenkins_role_arn = module.jenkins.jenkins_role_arn
 
   providers = {
     kubernetes = kubernetes
@@ -122,7 +122,7 @@ module "buried_marks" {
 }
 
 module "landing" {
-  source = "../../modules/apps/landing"
+  source       = "../../modules/apps/landing"
   project_name = var.project_name
   env          = var.env
   domain_name  = var.domain_name
