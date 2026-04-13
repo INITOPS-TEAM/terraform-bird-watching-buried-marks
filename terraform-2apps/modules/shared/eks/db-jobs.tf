@@ -36,9 +36,10 @@ resource "kubernetes_job_v1" "mariadb_rds_enable_iam" {
       metadata {}
       spec {
         container {
-          name    = "mariadb-rds-enable-iam"
-          image   = "alpine/mariadb:11.4.9"
-          command = ["sh", "-c", "mariadb -h ${var.host_mariadb_rds} -P ${local.map_secret["DATABASE_PORT"]} -u ${local.map_secret["MARIADB_USER"]} -p=${local.map_secret["MARIADB_PASSWORD"]} -e 'ALTER USER ${local.map_secret["MARIADB_USER"]} IDENTIFIED WITH AWSAuthenticationPlugin AS 'RDS';'; MARIADB_EXIT_CODE=$?; if [ $MARIADB_EXIT_CODE -eq '0' ]; then echo 'IAM authentication check is successfully completed'; exit 0; elif [ $MARIADB_EXIT_CODE -eq '1' ]; then echo 'IAM authentication is already enabled for ${local.map_secret["MARIADB_USER"]} OR specified long-living password is incorrect'; exit 0; fi; exit 1"]
+          name  = "mariadb-rds-enable-iam"
+          image = "alpine/mariadb:11.4.9"
+          # command = ["sh", "-c", "sleep inf"]
+          command = ["sh", "-c", "mariadb -h ${var.host_mariadb_rds} -P ${local.map_secret["DATABASE_PORT"]} -u ${local.map_secret["MARIADB_USER"]} --password=${local.map_secret["MARIADB_PASSWORD"]} -e 'ALTER USER ${local.map_secret["MARIADB_USER"]} IDENTIFIED WITH AWSAuthenticationPlugin AS \"RDS\";'; MARIADB_EXIT_CODE=$?; if [ $MARIADB_EXIT_CODE -eq '0' ]; then echo '!!! IAM authentication is successfully enabled !!!'; exit 0; elif [ $MARIADB_EXIT_CODE -eq '1' ]; then echo 'IAM authentication is already enabled for ${local.map_secret["MARIADB_USER"]} OR specified long-living password is incorrect'; exit 0; fi; exit 1"]
         }
         restart_policy = "Never"
       }
