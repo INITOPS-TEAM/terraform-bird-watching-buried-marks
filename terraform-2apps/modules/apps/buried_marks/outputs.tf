@@ -22,3 +22,8 @@ output "auth_db_endpoint" {
   value       = aws_db_instance.auth.endpoint
   description = "The RDS Endpoint of auth RDS"
 }
+
+output "map_db_endpoint" {
+  value       = aws_db_instance.map.endpoint
+  description = "The RDS Endpoint of map RDS"
+}

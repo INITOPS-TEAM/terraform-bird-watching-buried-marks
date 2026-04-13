@@ -100,11 +100,13 @@ variable "jenkins_role_arn" {
 }
 
 variable "host_postgres_rds" {
-  type = string
+  description = "auth RDS endpoint"
+  type        = string
 }
 
 variable "host_mariadb_rds" {
-  type = string
+  description = "map RDS endpoint"
+  type        = string
 }
 
 variable "rds_auth_resource_id" {
@@ -113,9 +115,4 @@ variable "rds_auth_resource_id" {
 
 variable "rds_map_resource_id" {
   type = string
-}
-
-variable "auth_db_endpoint" {
-  description = "auth RDS endpoint"
-  type        = string
 }
