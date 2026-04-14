@@ -36,8 +36,6 @@ module "eks" {
   host_mariadb_rds     = module.buried_marks.host_mariadb_rds
   rds_auth_resource_id = module.buried_marks.rds_auth_resource_id
   rds_map_resource_id  = module.buried_marks.rds_map_resource_id
-  auth_db_endpoint     = module.buried_marks.auth_db_endpoint
-
 
   desired_size   = 4
   min_size       = 2
