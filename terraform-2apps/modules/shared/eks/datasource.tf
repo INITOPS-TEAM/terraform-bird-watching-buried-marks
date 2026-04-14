@@ -10,3 +10,7 @@ data "aws_secretsmanager_secret_version" "auth" {
 data "aws_secretsmanager_secret_version" "map" {
   secret_id = "buried-marks/map-service"
 }
+
+data "aws_s3_bucket" "buried_marks_media" {
+  bucket = local.buried_marks_media[var.env]
+}

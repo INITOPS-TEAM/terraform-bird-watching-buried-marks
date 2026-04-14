@@ -118,6 +118,10 @@ resource "helm_release" "map_microservice" {
       name  = "db.port"
       value = "3306"
     },
+    {
+      name  = "s3.bucketName"
+      value = data.aws_s3_bucket.buried_marks_media.id
+    },
   ]
 }
 
