@@ -33,11 +33,19 @@ resource "helm_release" "consul" {
     global:
       name: consul
       datacenter: eu-north
-    #   secrets:
-    #     buried-marks-helm-consul: buried-marks/consul
-    #     consul: buried-marks/consul
 
-    # envSecret: consul-secrets
+      tls:
+        enabled: true
+        enableAutoEncrypt: true
+        httpsOnly: false
+        verify: true
+
+      acls:
+        enabled: true
+        manageSystemACLs: true
+
+      gossipEncryption:
+        enabled: true
 
     server:
       enabled: true
@@ -68,28 +76,6 @@ resource "helm_release" "consul" {
       enabled: true
       service:
         type: ClusterIP
-
-    tls:
-      enabled: true
-      enableAutoEncrypt: true
-      httpOnly: false
-      verify: true
-      caCert:
-        secretName: consul-secrets
-        secretKey: CONSUL_CA_CERT
-
-    acls:
-      enabled: false
-      # manageSystemACLs: true
-      # bootstrapToken:
-      #   secretName: consul-secrets
-      #   secretKey: CONSUL_BOOTSTRAP_TOKEN
-
-    gossipEncryption:
-      enabled: false
-      # secretName: consul-secrets
-      # secretKey: CONSUL_GOSSIP_KEY
-
   EOF
   ]
 
