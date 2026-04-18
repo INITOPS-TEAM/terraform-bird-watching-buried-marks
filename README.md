@@ -77,3 +77,23 @@ For enabling RDS IAM authentication, it is needed to add target user to the foll
 ```sql
 GRANT rds_iam TO <database_user>;
 ```
+
+### Consul
+
+#### Access Consul UI
+
+Forward the Consul server port:
+
+```bash
+kubectl port-forward pod/consul-server-0 -n consul 8500:8500
+```
+
+Then open your browser: `http://localhost:8500`
+
+#### Get Bootstrap ACL Token
+
+To authenticate in Consul UI, retrieve the bootstrap ACL token:
+
+```bash
+kubectl get secret consul-bootstrap-acl-token -n consul -o jsonpath="{.data.token}" | base64 --decode
+```
