@@ -46,6 +46,7 @@ resource "helm_release" "consul" {
 
       gossipEncryption:
         enabled: true
+        autoGenerate: true
 
     server:
       enabled: true
