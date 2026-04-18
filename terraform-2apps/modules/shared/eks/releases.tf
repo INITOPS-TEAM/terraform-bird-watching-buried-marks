@@ -45,7 +45,7 @@ resource "helm_release" "authentication_microservice" {
   name       = "auth-service"
   namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
   repository = local.repository
-  version    = "0.1.1"
+  version    = "0.1.2"
   chart      = "buried-marks-helm-authentication-microservice"
   depends_on = [
     helm_release.gateway,
@@ -75,7 +75,7 @@ resource "helm_release" "map_microservice" {
   name       = "map-service"
   namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
   repository = local.repository
-  version    = "0.1.1"
+  version    = "0.1.2"
   chart      = "buried-marks-helm-map-microservice"
   depends_on = [
     helm_release.gateway,
@@ -295,4 +295,26 @@ resource "helm_release" "monitoring" {
   ]
 
   # depends_on = [kubernetes_storage_class_v1.ebs_gp2]
+}
+
+resource "helm_release" "mcp" {
+  name       = "mcp"
+  namespace  = kubernetes_namespace_v1.buried_marks.metadata[0].name
+  repository = local.repository
+  version    = "0.1.0"
+  chart      = "buried-marks-helm-mcp"
+  depends_on = [
+    helm_release.gateway,
+    helm_release.eso
+  ]
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "mcp-service"
+    },
+    {
+      name  = "image.repository"
+      value = "${var.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/buried-marks-mcp"
+    }
+  ]
 }
