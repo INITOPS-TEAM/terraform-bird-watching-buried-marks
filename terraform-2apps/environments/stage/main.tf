@@ -39,9 +39,9 @@ module "eks" {
   auth_db_endpoint     = module.buried_marks.auth_db_endpoint
 
 
-  desired_size   = 4
-  min_size       = 2
-  max_size       = 5
+  desired_size   = 6
+  min_size       = 3
+  max_size       = 7
   instance_types = ["t3.small"]
 
   zone_id     = module.dns.zone_id

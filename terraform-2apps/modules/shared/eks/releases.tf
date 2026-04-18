@@ -16,6 +16,96 @@ resource "kubernetes_namespace_v1" "monitoring" {
   }
 }
 
+resource "kubernetes_namespace_v1" "consul" {
+  metadata {
+    name = "consul"
+  }
+}
+
+resource "helm_release" "consul" {
+  name       = "consul"
+  repository = "https://helm.releases.hashicorp.com"
+  chart      = "consul"
+  namespace  = kubernetes_namespace_v1.consul.metadata[0].name
+  version    = "1.9.6"
+
+  values = [<<-EOF
+    global:
+      name: consul
+      datacenter: eu-north
+    #   secrets:
+    #     buried-marks-helm-consul: buried-marks/consul
+    #     consul: buried-marks/consul
+
+    # envSecret: consul-secrets
+
+    server:
+      enabled: true
+      replicas: 3
+      bootstrapExpect: 3
+      affinity: ""
+      storage: 5Gi
+      storageClass: gp3
+
+    client:
+      enabled: false
+
+    connectInject:
+      enabled: true
+      default: false
+      transparentProxy:
+        enabled: true
+      consulDataplane:
+        enabled: true
+      apiGateway:
+        enabled: false
+        manageExternalCRDs: false
+
+    controller:
+      enabled: true
+
+    ui:
+      enabled: true
+      service:
+        type: ClusterIP
+
+    tls:
+      enabled: true
+      enableAutoEncrypt: true
+      httpOnly: false
+      verify: true
+      caCert:
+        secretName: consul-secrets
+        secretKey: CONSUL_CA_CERT
+
+    acls:
+      enabled: false
+      # manageSystemACLs: true
+      # bootstrapToken:
+      #   secretName: consul-secrets
+      #   secretKey: CONSUL_BOOTSTRAP_TOKEN
+
+    gossipEncryption:
+      enabled: false
+      # secretName: consul-secrets
+      # secretKey: CONSUL_GOSSIP_KEY
+
+  EOF
+  ]
+
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "consul"
+    }
+  ]
+
+  depends_on = [
+    kubernetes_namespace_v1.consul,
+    aws_eks_addon.ebs_csi
+  ]
+}
+
 resource "helm_release" "envoy_gw_api" {
   name       = "envoy-gw"
   namespace  = kubernetes_namespace_v1.envoy_gw_api.metadata[0].name

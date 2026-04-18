@@ -6,15 +6,15 @@ resource "aws_key_pair" "this" {
 module "vpc" {
   source = "../../modules/shared/vpc"
 
-  project_name    = var.project_name
-  env             = var.env
-  aws_region      = var.aws_region
-  vpc_cidr        = var.vpc_cidr
-  nat_az          = var.nat_az
-  cluster_name    = var.cluster_name
-  public_subnets  = var.public_subnets
-  compute_subnets = var.compute_subnets
-  eks_subnets     = var.eks_subnets
+  project_name        = var.project_name
+  env                 = var.env
+  aws_region          = var.aws_region
+  vpc_cidr            = var.vpc_cidr
+  nat_az              = var.nat_az
+  cluster_name        = var.cluster_name
+  public_subnets      = var.public_subnets
+  compute_subnets     = var.compute_subnets
+  eks_subnets         = var.eks_subnets
 }
 
 module "eks" {
@@ -38,9 +38,9 @@ module "eks" {
   rds_map_resource_id  = module.buried_marks.rds_map_resource_id
   auth_db_endpoint     = module.buried_marks.auth_db_endpoint
 
-  desired_size   = 4
-  min_size       = 2
-  max_size       = 5
+  desired_size   = 6
+  min_size       = 3
+  max_size       = 7
   instance_types = ["t3.small"]
 
   zone_id     = module.dns.zone_id
