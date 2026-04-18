@@ -78,7 +78,7 @@ For enabling RDS IAM authentication, it is needed to add target user to the foll
 GRANT rds_iam TO <database_user>;
 ```
 
-### Consul
+### Consul Service Mesh
 
 #### Access Consul UI
 
