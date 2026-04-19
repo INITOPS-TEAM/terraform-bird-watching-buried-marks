@@ -16,6 +16,83 @@ resource "kubernetes_namespace_v1" "monitoring" {
   }
 }
 
+resource "kubernetes_namespace_v1" "consul" {
+  metadata {
+    name = "consul"
+  }
+}
+
+resource "helm_release" "consul" {
+  name       = "consul"
+  repository = "https://helm.releases.hashicorp.com"
+  chart      = "consul"
+  namespace  = kubernetes_namespace_v1.consul.metadata[0].name
+  version    = "1.9.6"
+
+  values = [<<-EOF
+    global:
+      name: consul
+      datacenter: eu-north
+
+      tls:
+        enabled: true
+        enableAutoEncrypt: true
+        httpsOnly: false
+        verify: true
+
+      acls:
+        enabled: true
+        manageSystemACLs: true
+
+      gossipEncryption:
+        enabled: true
+        autoGenerate: true
+
+    server:
+      enabled: true
+      replicas: 3
+      bootstrapExpect: 3
+      affinity: ""
+      storage: 5Gi
+      storageClass: gp3
+
+    client:
+      enabled: false
+
+    connectInject:
+      enabled: true
+      default: false
+      transparentProxy:
+        enabled: true
+      consulDataplane:
+        enabled: true
+      apiGateway:
+        enabled: false
+        manageExternalCRDs: false
+
+    controller:
+      enabled: true
+
+    ui:
+      enabled: true
+      service:
+        type: ClusterIP
+  EOF
+  ]
+
+  set = [
+    {
+      name  = "fullnameOverride"
+      value = "consul"
+    }
+  ]
+
+  depends_on = [
+    kubernetes_namespace_v1.consul,
+    aws_eks_addon.ebs_csi
+  ]
+}
+
 resource "helm_release" "envoy_gw_api" {
   name       = "envoy-gw"
   namespace  = kubernetes_namespace_v1.envoy_gw_api.metadata[0].name

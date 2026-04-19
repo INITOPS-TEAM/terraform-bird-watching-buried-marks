@@ -37,9 +37,9 @@ module "eks" {
   rds_auth_resource_id = module.buried_marks.rds_auth_resource_id
   rds_map_resource_id  = module.buried_marks.rds_map_resource_id
 
-  desired_size   = 4
-  min_size       = 2
-  max_size       = 5
+  desired_size   = 6
+  min_size       = 3
+  max_size       = 7
   instance_types = ["t3.small"]
 
   zone_id     = module.dns.zone_id
