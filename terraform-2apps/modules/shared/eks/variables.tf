@@ -26,19 +26,19 @@ variable "node_group_name" {
 
 variable "desired_size" {
   type        = number
-  default     = 4
+  default     = 6
   description = "Desired number of nodes"
 }
 
 variable "min_size" {
   type        = number
-  default     = 1
+  default     = 3
   description = "Minimum nodes"
 }
 
 variable "max_size" {
   type        = number
-  default     = 3
+  default     = 7
   description = "Maximum nodes"
 }
 
